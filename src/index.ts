@@ -1,30 +1,29 @@
 import express from "express";
-import socketio from "socket.io";
-import {Request, Response} from "express";
+import socketio, { Socket } from "socket.io";
 import path from "path";
 const app = express();
 
-app.set('port', 5000);
-
-app.listen(app.get('port'), () => {
-    console.log('server is running');
-    
+app.set('port', 8080);
+app.get("/", (req: any, res: any ) => {
+    res.sendFile(path.resolve("./index.html"));
 });
 
-
-const server = app.listen(app.get("port"), function(){
-    console.log("listening on *:5000");
+const server = app.listen(app.get("port"), () => {
+    console.log(`listening on ${app.get('port')}`);
     
 });
 
 let io = new socketio.Server(server);
 
 
-io.on("connection", function(socket:any){
-    console.log("an user connected");
-    
-});
+io.on("connection", (socket:any) => {
 
-app.get("/", (req: any, res: any ) => {
-    res.sendFile(path.resolve("./index.html"));
+    console.log("An user connected");
+
+    socket.on('message', (message: any) => {
+
+        io.emit('message', message);
+
+    })
+    
 });
