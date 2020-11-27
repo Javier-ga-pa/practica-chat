@@ -1,5 +1,5 @@
 import express from "express";
-import socketio, { Socket } from "socket.io";
+import socketio from "socket.io";
 import path from "path";
 const app = express();
 
